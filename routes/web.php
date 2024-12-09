@@ -4,77 +4,78 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Skill;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\AdminController;
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/test', function () {
-    return 123;
-});
+// test
+Route::get('/', function () { return view('welcome'); });
 
 Route::get('/test/{id}', [TestController::class, 'show']);
 
-route::get('/portfolio' , function() {
+Route::get('/skills/{category}', [TestController::class, 'renderPageSkillsInCategory']);
+
+// Это маршрут навыков
+Route::get('/skills', [TestController::class, 'renderPageSkills']);
+
+Route::get('/skills-json', [TestController::class, 'getAllSkills'])->middleware('auth');
+
+// Страница создания скиллов
+Route::get('/create-skill', [SkillController::class, 'renderCreatePage'])
+    ->middleware('auth')
+    ->name('skillCreate');
+
+// Удаление скилла
+Route::get('/delete-skill/{id}', [SkillController::class, 'deleteSkill'])
+    ->middleware('auth')
+    ->name('skillDelete');
+
+// POST-запрос на создание скилла (НЕ СТРАНИЦА)
+Route::post('/create-skill', [SkillController::class, 'createSkill'])
+    ->middleware('auth')
+    ->name('skillCreate.post');
+
+Route::get('/portfolio', function () {
     $title = 'Портфолио Terricon';
+
     $jobs = [
         [
             'name' => 'Разработка сайта для ЖК',
             'price' => 1000,
             'val' => '$'
-
         ],
         [
-            'name' => 'Разработка сайта для клиники',
+            'name' => 'Разработка сайта для Клиники',
             'price' => 1500,
             'val' => '$'
-
         ],
         [
             'name' => 'Разработка сайта для Terricon',
             'price' => 2000,
             'val' => '$'
-
         ]
     ];
 
     return view('portfolio')
-        ->with('title',$title)
+        ->with('title', $title)
         ->with('jobs', $jobs);
+});
 
+Route::get('/news', function () {
+    $title = 'Новости';
 
+    return view('news')->with('title', $title);
 }); 
-// Это маршрут навыков
-Route::get('/skills/{category}', function($category) {
-    $title = "Навыки в категории $category";
 
-    $skills = skill::where('category', $category)->get();
-
-   
-
-  
-    return view('skills')
-        ->with('title', $title)
-        ->with('skills', $skills);
-
-
+// ADMIN
+Route::middleware([
+    'auth',
+    'roleChecker:admin'
+])->prefix('admin')->group(function () {
+    // /admin/users
+    Route::get('/users', [AdminController::class, 'renderUsers'])->name('renderUsers');
+    Route::get('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
 });
-
-//Это маршрут навыков
-Route::get('/skills', function(){
-    $title = 'Навыки';
-
-    $skills = skill::all();
-
-  
-    return view('skills')
-        ->with('title', $title)
-        ->with('skills', $skills);
-
-
-});
-
-
+// /ADMIN
 
 Route::middleware([
     'auth:sanctum',
