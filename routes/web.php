@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Skill;
+use App\Http\Controllers\TestController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,6 +12,8 @@ Route::get('/', function () {
 Route::get('/test', function () {
     return 123;
 });
+
+Route::get('/test/{id}', [TestController::class, 'show']);
 
 route::get('/portfolio' , function() {
     $title = 'Портфолио Terricon';
@@ -40,6 +44,7 @@ route::get('/portfolio' , function() {
 
 
 }); 
+// Это маршрут навыков
 Route::get('/skills/{category}', function($category) {
     $title = "Навыки в категории $category";
 
@@ -55,7 +60,7 @@ Route::get('/skills/{category}', function($category) {
 
 });
 
-
+//Это маршрут навыков
 Route::get('/skills', function(){
     $title = 'Навыки';
 
