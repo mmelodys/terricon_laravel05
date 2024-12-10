@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Портфолио TERRICON</title>
+        <title>{{ $title }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -62,15 +62,18 @@
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <h1>{{ $title }}</h1>
                         </div>
+
                         <hr/><br/>
+
                         <div>
-                        @foreach($skills as $skill)
-                         <a href="" id="skill{{$skill->id}}"
-                            class = "px-3 py-2 border">
-                         {{$skill->name}} {{$skill->lvl}}
-                         </a>   
-                        @endforeach
-                        
+
+                            @foreach($skills as $skill)
+                                <a href="" id="skill{{ $skill->id }}" class="px-3 py-2 border">
+                                    {{ $skill->name }} #{{ $skill->lvl }}
+                                </a>
+                            @endforeach
+                            
+                            
                         </div>
                     </main>
 
