@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class Portfolio extends Model
 {
     protected $fillable = [
-        'name', 'lvl', 'category'
+        'name', 'price', 'val', 'category'
     ];
 }

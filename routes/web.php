@@ -3,12 +3,18 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Skill;
+use App\Models\Portfolio;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AdminController;
 
 // test
 Route::get('/', function () { return view('welcome'); });
+
+Route::get('/pages/{name}', function ($name) {
+    return view("pages.$name");
+})->name('pages');
 
 Route::get('/test/{id}', [TestController::class, 'show']);
 
@@ -33,6 +39,15 @@ Route::get('/delete-skill/{id}', [SkillController::class, 'deleteSkill'])
 Route::post('/create-skill', [SkillController::class, 'createSkill'])
     ->middleware('auth')
     ->name('skillCreate.post');
+
+
+
+    // Страница создания портфолио
+Route::get('/create-portfolio', [PortfolioController::class, 'renderCreatePage'])
+->middleware('auth')
+->name('createPortfolio');
+Route::post('/portfolio', [PortfolioController::class, 'createPortfolio'])->middleware('auth')->name('portfolioCreate.post');
+
 
 Route::get('/portfolio', function () {
     $title = 'Портфолио Terricon';
@@ -72,8 +87,32 @@ Route::middleware([
     'roleChecker:admin'
 ])->prefix('admin')->group(function () {
     // /admin/users
-    Route::get('/users', [AdminController::class, 'renderUsers'])->name('renderUsers');
-    Route::get('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
+    Route::get('/users', [AdminController::class, 'renderUsers'])
+        ->name('renderUsers');
+
+    /**
+     * Редактирование юзера
+     */
+    Route::get('/users/{id}', [AdminController::class, 'renderEditUser'])
+        ->name('renderEditUser');
+
+    Route::post('/users/{id}', [AdminController::class, 'editUser'])
+        ->name('editUser');
+
+    /**
+     * Добавление юзера
+     */
+    Route::get('/add-user', [AdminController::class, 'renderAddUser'])
+        ->name('renderAddUser');
+
+    Route::post('/add-user', [AdminController::class, 'addUser'])
+        ->name('addUser');
+
+    /**
+     * Удаление юзера
+     */
+    Route::get('/delete-user/{id}', [AdminController::class, 'deleteUser'])
+        ->name('deleteUser');
 });
 // /ADMIN
 
