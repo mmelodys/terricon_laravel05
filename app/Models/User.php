@@ -66,4 +66,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static function getName ($user_id) {
+        return self::find($user_id)->name;
+    }
 }

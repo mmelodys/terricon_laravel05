@@ -24,6 +24,13 @@
                         <x-nav-link href="{{ route('createPortfolio') }}" :active="request()->routeIs('createPortfolio')">
                             {{ __('Портфолио') }}
                         </x-nav-link>
+                        
+                        <!-- Ссылка только для администратора -->
+                    @if(auth()->user()->role === 'admin')
+                    <x-nav-link href="{{ route('renderUsers') }}" :active="request()->routeIs('renderUsers')">
+                        {{ __('Пользователи') }}
+                    </x-nav-link>
+                @endif
                 </div>
             </div>
 

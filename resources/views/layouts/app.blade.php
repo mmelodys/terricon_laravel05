@@ -32,14 +32,14 @@
                 </header>
             @endif
 
-            <!-- Page Content -->
-            <main>
+               <!-- Page Content -->
+               <main>
                 {{ $slot }}
             </main>
         </div>
-
+ 
         @stack('modals')
-
+ 
         @livewireScripts
     </body>
 </html>
